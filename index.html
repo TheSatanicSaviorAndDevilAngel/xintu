@@ -1,11 +1,9 @@
-<!DOCTYPE html>
+>
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>心途 · 自我探索</title>
-    <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+    <title
         body {
             font-family: '华文行楷', 'STKaiti', 'KaiTi', '楷体', serif;
             background: #faf7f0;
@@ -42,12 +40,12 @@
         }
         .brand {
             font-size: 28px; font-weight: 500;
-            color: #4a5a3c;
+            color:
             font-family: '华文行楷', 'STKaiti', serif;
         }
         .subtitle {
             font-size: 14px; color: #8f9e81;
-            font-family: '华文行楷', 'KaiTi', serif;
+            font-family: '华文行楷', 
         }
         .page { display: none; }
         .page.active { display: block; }
@@ -80,7 +78,7 @@
             flex: 1; background: #e5ecda;
             border: none; padding: 16px 0;
             border-radius: 40px; font-size: 18px;
-            color: #4a5a3c; cursor: pointer;
+            color: #4a5a3er;
             font-family: '华文行楷', 'STKaiti', serif;
         }
         .progress {
@@ -186,7 +184,7 @@
             { text: "你是否曾经因为别人一句无心的话而难过很久？", weights: { "情绪/创伤": 0.6, "社交理解": -0.3, "社交焦虑": 0.4 } },
             { text: "你是否对某些数字、颜色或物品有特别的偏好或忌讳？", weights: { "刻板兴趣": 0.6, "感官敏感": 0.2 } },
             { text: "你是否觉得和人保持一定距离会让你更舒服，即使对方是朋友？", weights: { "边界敏感": 0.7, "社交焦虑": 0.3 } },
-            { text: "你是否容易被他人的情绪感染，甚至比他们本人还难过或兴奋？", weights: { "感官敏感": 0.5, "情绪/创伤": 0.6 } },
+            { text: "至比他们本人还难过或兴奋？", weights: { "感官敏感": 0.5, "情绪/创伤": 0.6 } },
             { text: "你是否经常因为担心做不好而推迟或放弃开始一件事？", weights: { "社交焦虑": 0.5, "情绪/创伤": 0.5 } },
             { text: "你是否对某些特定的声音（如咀嚼声、空调声）特别无法忍受？", weights: { "感官敏感": 0.9 } },
             { text: "你是否喜欢提前很久规划事情，并因为计划被打乱而烦躁？", weights: { "刻板兴趣": 0.7, "情绪/创伤": 0.3 } },
@@ -196,7 +194,7 @@
             { text: "你对食物的口感、温度是否特别挑剔？", weights: { "感官敏感": 0.6, "刻板兴趣": 0.2 } },
             { text: "你是否对强光、闪光非常敏感，觉得刺眼？", weights: { "感官敏感": 0.7 } },
             { text: "你是否会在头脑中反复回想某些事情，难以停止？", weights: { "刻板兴趣": 0.5, "情绪/创伤": 0.5 } },
-            { text: "你是否很难理解为什么有些人会那么生气或伤心？", weights: { "社交理解": 0.7, "情绪/创伤": 0.2 } },
+            { text: "你那么生气或伤心？", weights: { "社交理解": 0.7, "情绪/创伤": 0.2 } },
             { text: "你是否经常需要别人把话说明白才能理解，无法领会暗示？", weights: { "社交理解": 0.8 } },
             { text: "你是否觉得自己不太擅长安慰别人？", weights: { "社交理解": 0.5, "社交焦虑": 0.3 } },
             { text: "你的情绪波动比较大，有时会因为一点小事突然崩溃？", weights: { "情绪/创伤": 0.9 } },
@@ -221,7 +219,7 @@
         const quizPage = document.getElementById('quizPage');
         const reportPage = document.getElementById('reportPage');
         const startBtn = document.getElementById('startBtn');
-        const prevBtn = document.getElementById('prevBtn');
+        const prevBtn =prevBtn');
         const nextBtn = document.getElementById('nextBtn');
         const questionText = document.getElementById('questionText');
         const ratingInput = document.getElementById('ratingInput');
@@ -244,10 +242,10 @@
 
         nextBtn.addEventListener('click', function() {
             if (ratingInput.value === '') {
-                alert('请先输入一个分数（1-5，可带0.5）');
+                alert('请先输入
                 return;
             }
-            let val = parseFloat(ratingInput.value);
+            let val = parseFloat(ratingInp
             if (isNaN(val) || val < 1 || val > 5) {
                 alert('请输入1-5之间的数字');
                 return;
@@ -311,7 +309,7 @@
 
             // 生成报告
             let html = '<div class="report-section">';
-            html += '<div class="dimension-title">🌿 你的六维画像</div>';
+            html += '<div cla</div>';
             
             for (let d of dims) {
                 let score = parseFloat(finalAvg[d]);
@@ -327,11 +325,11 @@
             
             html += '<div class="report-section">';
             html += '<div class="dimension-title">📝 简单解读</div>';
-            html += '<div class="dimension-desc">感谢您完成测试。完整版报告将在后续更新。</div>';
+            html += '<div c成测试。完整版报告将在后续更新。</div>';
             html += '</div>';
 
             reportContent.innerHTML = html;
         }
-    </script>
+    
 </body>
 </html>

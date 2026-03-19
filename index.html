@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>心途 · 自我探索</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f9f5f0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+        }
+        .app-container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffffdd;
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            padding: 28px 20px;
+            border: 1px solid #f0e4d5;
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .logo {
+            width: 48px;
+            height: 48px;
+            background: #d9c8b4;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #5e4b3a;
+        }
+        .brand {
+            font-size: 26px;
+            font-weight: 500;
+            color: #4a3a2c;
+        }
+        .subtitle {
+            font-size: 15px;
+            color: #b7a48e;
+        }
+        .page { display: none; }
+        .page.active { display: block; }
+        .btn {
+            background: #d9c8b4;
+            border: none;
+            color: #3f3327;
+            font-size: 18px;
+            padding: 16px 28px;
+            border-radius: 40px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.03);
+        }
+        .btn:active { background: #cab59d; }
+        .progress {
+            font-size: 15px;
+            color: #b7a48e;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        .question-card {
+            background: #fefcf9;
+            border-radius: 28px;
+            padding: 28px 20px;
+            margin-bottom: 24px;
+            border: 1px solid #f0e4d5;
+        }
+        .question-text {
+            font-size: 20px;
+            color: #3f3327;
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+        .number-input {
+            width: 100%;
+            padding: 18px;
+            font-size: 22px;
+            text-align: center;
+            border: 2px solid #e6d6c4;
+            border-radius: 50px;
+            background: white;
+            color: #4a3a2c;
+            outline: none;
+            margin-bottom: 12px;
+        }
+        .hint {
+            font-size: 14px;
+            color: #b7a48e;
+            margin-bottom: 8px;
+        }
+        .nav-buttons { display: flex; gap: 12px; margin-top: 20px; }
+        .nav-btn {
+            flex: 1;
+            background: #efe4d9;
+            border: none;
+            padding: 16px 0;
+            border-radius: 40px;
+            font-size: 18px;
+            color: #4a3a2c;
+            cursor: pointer;
+        }
+        .report-section {
+            background: #fefcf9;
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 24px;
+            border: 1px solid #f0e4d5;
+        }
+        .dimension-title {
+            font-size: 20px;
+            font-weight: 500;
+            color: #4a3a2c;
+            margin-bottom: 12px;
+            border-left: 6px solid #d9c8b4;
+            padding-left: 14px;
+        }
+        .dimension-score {
+            font-size: 18px;
+            color: #b7a48e;
+            margin-bottom: 10px;
+        }
+        .dimension-desc {
+            font-size: 16px;
+            color: #5e4b3a;
+            line-height: 1.6;
+        }
+        .overall-box {
+            background: #efe4d9;
+            border-radius: 24px;
+            padding: 20px;
+            margin: 28px 0;
+        }
+        .possibilities {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #e6d6c4;
+        }
+        .footer-note {
+            margin-top: 32px;
+            font-size: 13px;
+            color: #b7a48e;
+            text-align: center;
+            border-top: 1px dashed #e6d6c4;
+            padding-top: 20px;
+        }
+        .disclaimer {
+            font-size: 12px;
+            color: #b7a48e;
+            margin-top: 16px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <div class="logo">🧭</div>
+            <div>
+                <div class="brand">心途</div>
+                <div class="subtitle">内在探索 · 温和向导</div>
+            </div>
+        </div>
+
+        <div id="welcomePage" class="page active">
+            <div class="welcome-title">你好，<br>欢迎来到心途</div>
+            <div class="welcome-text">
+                这是一个自我探索的角落。你会遇到45个生活片段，每个片段请用1–5分告诉我它像不像你（可用0.5分步长，例如1.5、2.5）。<br><br>
+                没有标准答案，凭直觉就好。结束后，我会为你梳理一份专属的内心画像。
+            </div>
+            <button class="btn" id="startBtn">开始探索</button>
+            <div class="disclaimer">结果仅供参考，不构成专业诊断</div>
+        </div>
+
+        <div id="quizPage" class="page">
+            <div class="progress" id="progressText">第 1 / 45 题</div>
+            <div class="question-card">
+                <div class="question-text" id="questionText"></div>
+                <div class="input-area">
+                    <input type="number" id="ratingInput" class="number-input" step="0.5" min="1" max="5" placeholder="1.0 ~ 5.0">
+                    <div class="hint">1 = 完全不像，5 = 非常像</div>
+                </div>
+                <div class="nav-buttons">
+                    <button class="nav-btn" id="prevBtn" disabled>上一题</button>
+                    <button class="nav-btn" id="nextBtn">下一题</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="reportPage" class="page">
+            <div id="reportContent"></div>
+            <div class="footer-note">
+                <div>© 心途 · 你的专属视角</div>
+                <div class="disclaimer">本测评不能替代专业心理诊断或医疗建议</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { text: "参加完聚会或人多的地方后，你是否需要很长时间独处才能恢复精力？", weights: { "社交焦虑": 0.7, "边界敏感": 0.5, "感官敏感": 0.3 } },
+            { text: "如果有人没经过你同意就用你的东西或靠你太近，你会不会感到烦躁甚至生气？", weights: { "边界敏感": 0.9, "情绪/创伤": 0.3 } },
+            { text: "你是否常常注意到别人忽略的细微声音、光线变化或气味？", weights: { "感官敏感": 0.8, "刻板兴趣": 0.2 } },
+            { text: "在嘈杂或混乱的环境（如超市、火车站），你是否容易感到心烦意乱，想离开？", weights: { "感官敏感": 0.7, "社交焦虑": 0.4 } },
+            { text: "你有没有特别痴迷的爱好，可以花大量时间研究或沉浸其中？", weights: { "刻板兴趣": 0.9 } },
+            { text: "和别人聊天时，你是否有时听不懂他们的言外之意，或分不清玩笑和认真？", weights: { "社交理解": 0.8, "社交焦虑": 0.3 } },
+            { text: "你是否喜欢按固定的方式做事（如固定路线、固定顺序），临时改变会让你不安？", weights: { "刻板兴趣": 0.8, "情绪/创伤": 0.2 } },
+            { text: "你是否对某些衣服的材质、标签特别敏感，有些衣服穿上会很难受？", weights: { "感官敏感": 0.7, "刻板兴趣": 0.2 } },
+            { text: "在需要当众说话或表现之前，你是否会紧张、担心出丑？", weights: { "社交焦虑": 0.9, "情绪/创伤": 0.2 } },
+            { text: "有时候想和人交流，但不知道如何开口，最终选择一个人待着？", weights: { "社交焦虑": 0.6, "社交理解": 0.4 } },
+            { text: "你会不会因为一件小事（如东西找不到、计划改变）突然情绪崩溃？", weights: { "情绪/创伤": 0.8, "刻板兴趣": 0.3 } },
+            { text: "你是否常觉得自己像个局外人，很难融入周围的人群？", weights: { "社交焦虑": 0.7, "社交理解": 0.3, "情绪/创伤": 0.2 } },
+            { text: "过去一些不愉快的经历，会不会在不经意间浮现，影响你现在的心情？", weights: { "情绪/创伤": 1.0 } },
+            { text: "你是否非常需要自己的独立空间，被打扰时会烦躁甚至发火？", weights: { "边界敏感": 0.8, "情绪/创伤": 0.3 } },
+            { text: "当你全神贯注做一件事时，别人叫你，你是不是常常听不见？", weights: { "刻板兴趣": 0.6, "感官敏感": -0.2 } },
+            { text: "在人群里，即使没人注意你，你也会感到不自在，想尽快离开？", weights: { "社交焦虑": 0.7, "边界敏感": 0.4 } },
+            { text: "你是否会因为第二天的社交活动而提前感到紧张，甚至影响睡眠？", weights: { "社交焦虑": 0.8, "情绪/创伤": 0.3 } },
+            { text: "你有没有过因为环境太吵而无法集中注意力，甚至感到头疼？", weights: { "感官敏感": 0.8, "社交焦虑": 0.2 } },
+            { text: "你是否会反复检查门窗、电器等，确保它们处于你想要的状态？", weights: { "刻板兴趣": 0.7, "情绪/创伤": 0.2 } },
+            { text: "你是否曾经因为别人一句无心的话而难过很久？", weights: { "情绪/创伤": 0.6, "社交理解": -0.3, "社交焦虑": 0.4 } },
+            { text: "你是否对某些数字、颜色或物品有特别的偏好或忌讳？", weights: { "刻板兴趣": 0.6, "感官敏感": 0.2 } },
+            { text: "你是否觉得和人保持一定距离会让你更舒服，即使对方是朋友？", weights: { "边界敏感": 0.7, "社交焦虑": 0.3 } },
+            { text: "你是否容易被他人的情绪感染，甚至比他们本人还难过或兴奋？", weights: { "感官敏感": 0.5, "情绪/创伤": 0.6 } },
+            { text: "你是否经常因为担心做不好而推迟或放弃开始一件事？", weights: { "社交焦虑": 0.5, "情绪/创伤": 0.5 } },
+            { text: "你是否对某些特定的声音（如咀嚼声、空调声）特别无法忍受？", weights: { "感官敏感": 0.9 } },
+            { text: "你是否喜欢提前很久规划事情，并因为计划被打乱而烦躁？", weights: { "刻板兴趣": 0.7, "情绪/创伤": 0.3 } },
+            { text: "你是否在人群中会不自觉地观察每个人的表情和动作，试图理解他们在想什么？", weights: { "社交理解": 0.6, "社交焦虑": 0.3 } },
+            { text: "和新认识的人交谈时，你是否常常不知道说什么，感到尴尬？", weights: { "社交焦虑": 0.8, "社交理解": 0.3 } },
+            { text: "你是否尽量避免成为众人关注的焦点？", weights: { "社交焦虑": 0.7, "边界敏感": 0.2 } },
+            { text: "你对食物的口感、温度是否特别挑剔？", weights: { "感官敏感": 0.6, "刻板兴趣": 0.2 } },
+            { text: "你是否对强光、闪光非常敏感，觉得刺眼？", weights: { "感官敏感": 0.7 } },
+            { text: "你是否会在头脑中反复回想某些事情，难以停止？", weights: { "刻板兴趣": 0.5, "情绪/创伤": 0.5 } },
+            { text: "你是否很难理解为什么有些人会那么生气或伤心？", weights: { "社交理解": 0.7, "情绪/创伤": 0.2 } },
+            { text: "你是否经常需要别人把话说明白才能理解，无法领会暗示？", weights: { "社交理解": 0.8 } },
+            { text: "你是否觉得自己不太擅长安慰别人？", weights: { "社交理解": 0.5, "社交焦虑": 0.3 } },
+            { text: "你的情绪波动比较大，有时会因为一点小事突然崩溃？", weights: { "情绪/创伤": 0.9 } },
+            { text: "你是否容易陷入低落情绪，难以自拔？", weights: { "情绪/创伤": 0.8, "社交焦虑": 0.2 } },
+            { text: "你是否经常做噩梦，或睡眠质量不佳？", weights: { "情绪/创伤": 0.6, "感官敏感": 0.2 } },
+            { text: "你是否对某些话题或场景特别敏感，会刻意回避？", weights: { "情绪/创伤": 0.7, "边界敏感": 0.3 } },
+            { text: "你是否觉得自己很难完全信任别人？", weights: { "情绪/创伤": 0.5, "边界敏感": 0.5 } },
+            { text: "你是否经常感到疲惫，即使没做什么事？", weights: { "情绪/创伤": 0.5, "感官敏感": 0.3 } },
+            { text: "你是否不喜欢别人未经允许进入你的房间或私人空间？", weights: { "边界敏感": 0.8 } },
+            { text: "你是否对别人的情绪过度负责，容易感到被卷入？", weights: { "边界敏感": -0.4, "感官敏感": 0.5, "情绪/创伤": 0.4 } },
+            { text: "你是否希望别人能尊重你的隐私，不打听太多？", weights: { "边界敏感": 0.6 } },
+            { text: "你是否觉得很难拒绝别人的要求，即使自己已经很累了？", weights: { "边界敏感": -0.5, "社交焦虑": 0.5, "情绪/创伤": 0.3 } }
+        ];
+
+        const dims = ["社交焦虑", "感官敏感", "刻板兴趣", "社交理解", "情绪/创伤", "边界敏感"];
+        let answers = new Array(questions.length).fill(null);
+        let currentIndex = 0;
+        let dimScores = { "社交焦虑": 0, "感官敏感": 0, "刻板兴趣": 0, "社交理解": 0, "情绪/创伤": 0, "边界敏感": 0 };
+        let dimWeights = { "社交焦虑": 0, "感官敏感": 0, "刻板兴趣": 0, "社交理解": 0, "情绪/创伤": 0, "边界敏感": 0 };
+
+        const welcomePage = document.getElementById('welcomePage');
+        const quizPage = document.getElementById('quizPage');
+        const reportPage = document.getElementById('reportPage');
+        const startBtn = document.getElementById('startBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const questionText = document.getElementById('questionText');
+        const ratingInput = document.getElementById('ratingInput');
+        const progressText = document.getElementById('progressText');
+        const reportContent = document.getElementById('reportContent');
+
+        startBtn.addEventListener('click', () => {
+            welcomePage.classList.remove('active');
+            quizPage.classList.add('active');
+            loadQuestion(0);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                saveCurrentAnswer();
+                currentIndex--;
+                loadQuestion(currentIndex);
+            }
+        });
+
+        nextBtn.addEventListener('click', () => {
+            if (ratingInput.value === '') {
+                alert('请先输入一个分数（1-5，可带0.5）');
+                return;
+            }
+            let val = parseFloat(ratingInput.value);
+            if (isNaN(val) || val < 1 || val > 5 || (val * 2) % 1 !== 0) {
+                alert('请输入有效的分数：1到5之间，以0.5为步长');
+                return;
+            }
+            saveCurrentAnswer();
+            if (currentIndex < questions.length - 1) {
+                currentIndex++;
+                loadQuestion(currentIndex);
+            } else {
+                calculateReport();
+                quizPage.classList.remove('active');
+                reportPage.classList.add('active');
+            }
+        });
+
+        function loadQuestion(index) {
+            questionText.innerText = questions[index].text;
+            if (answers[index] !== null) {
+                ratingInput.value = answers[index];
+            } else {
+                ratingInput.value = '';
+            }
+            progressText.innerText = `第 ${index + 1} / 45 题`;
+            prevBtn.disabled = index === 0;
+        }
+
+        function saveCurrentAnswer() {
+            if (ratingInput.value !== '') {
+                answers[currentIndex] = parseFloat(ratingInput.value);
+            }
+        }
+
+        function calculateReport() {
+            for (let d of dims) {
+                dimScores[d] = 0;
+                dimWeights[d] = 0;
+            }
+            for (let i = 0; i < questions.length; i++) {
+                if (answers[i] === null) continue;
+                let rating = answers[i];
+                let q = questions[i];
+                for (let dim in q.weights) {
+                    let w = q.weights[dim];
+                    dimScores[dim] += w * (rating - 3.0);
+                    dimWeights[dim] += Math.abs(w);
+                }
+            }
+            let finalAvg = {};
+            for (let d of dims) {
+                if (dimWeights[d] > 0) {
+                    finalAvg[d] = dimScores[d] / dimWeights[d] + 3.0;
+                } else {
+                    finalAvg[d] = 3.0;
+                }
+                finalAvg[d] = Math.min(5, Math.max(1, finalAvg[d]));
+            }
+
+            let html = '<div class="report-section">';
+            html += '<div class="dimension-title">你的六维画像</div>';
+            for (let d of dims) {
+                let score = finalAvg[d].toFixed(2);
+                let desc = getDimensionDescription(d, finalAvg[d]);
+                html += `<div class="dimension-score">${d}：${score}</div>`;
+                html += `<div class="dimension-desc">${desc}</div><br>`;
+            }
+            html += '</div>';
+
+            html += '<div class="overall-box">';
+            html += '<div class="dimension-title">整体来看</div>';
+            html += `<div class="overall-text">${getOverallDescription(finalAvg)}</div>`;
+            html += '</div>';
+
+            html += '<div class="possibilities">';
+            html += '<div class="dimension-title">可能性参考（仅为可能性，非诊断）</div>';
+            html += `<div class="dimension-desc">${getPossibilities(finalAvg)}</div>`;
+            html += '</div>';
+
+            reportContent.innerHTML = html;
+        }
+
+        function getDimensionDescription(dim, score) {
+            if (dim === "社交焦虑") {
+                if (score >= 4.0) return "你在社交场合容易感到紧张，需要较多独处来恢复。这可能源于内心对评价的敏感。";
+                if (score >= 3.0) return "你偶尔会在社交中感到压力，但通常还能应对。";
+                return "你在社交中通常感到自在，不太需要额外恢复时间。";
+            }
+            if (dim === "感官敏感") {
+                if (score >= 4.0) return "你对声音、光线、触觉等感官输入比较敏感，容易受到环境影响。这是创造力和观察力细腻的来源。";
+                if (score >= 3.0) return "你对某些感官刺激会有反应，但多数时候能适应环境。";
+                return "你对感官刺激不太敏感，环境中的噪音、光线等很少打扰到你。";
+            }
+            if (dim === "刻板兴趣") {
+                if (score >= 4.0) return "你有很强的专注力和秩序感，喜欢深入钻研感兴趣的领域，也偏爱固定的生活程序。这让你在某些方面非常专业。";
+                if (score >= 3.0) return "你有一些固定的爱好或习惯，但并不刻板，可以灵活调整。";
+                return "你喜欢新鲜变化，不太受固定程序束缚。";
+            }
+            if (dim === "社交理解") {
+                if (score >= 4.0) return "你有时会觉得难以理解别人的言外之意或社交暗示，这可能让你在人际互动中感到困惑。";
+                if (score >= 3.0) return "大多数时候你能理解他人的意图，偶尔会有误解。";
+                return "你通常能较好地理解他人的想法和感受，社交直觉比较敏锐。";
+            }
+            if (dim === "情绪/创伤") {
+                if (score >= 4.0) return "你的情绪波动较大，过去的一些经历可能仍在影响你。这需要温柔对待自己，给自己时间处理。";
+                if (score >= 3.0) return "你的情绪相对稳定，但有时也会因小事波动。";
+                return "你的情绪通常很平稳，不太受过去事件干扰。";
+            }
+            if (dim === "边界敏感") {
+                if (score >= 4.0) return "你非常看重个人空间和物品的独立性，当边界被侵犯时会强烈反应。这是健康的自我保护意识。";
+                if (score >= 3.0) return "你比较在意个人边界，但也能接受偶尔的干扰。";
+                return "你对个人空间的要求比较宽松，容易与人亲近。";
+            }
+            return "";
+        }
+
+        function getOverallDescription(avg) {
+            let highDims = [];
+            if (avg["感官敏感"] >= 3.8) highDims.push("感官敏感");
+            if (avg["刻板兴趣"] >= 3.8) highDims.push("刻板兴趣");
+            if (avg["社交焦虑"] >= 3.8) highDims.push("社交焦虑");
+            if (avg["情绪/创伤"] >= 3.8) highDims.push("情绪/创伤");
+            if (avg["边界敏感"] >= 3.8) highDims.push("边界敏感");
+            if (avg["社交理解"] <= 2.8) highDims.push("社交理解偏低");
+
+            if (highDims.includes("感官敏感") && highDims.includes("刻板兴趣")) {
+                return "你对世界有着细腻的感知和强烈的专注力，喜欢深入探索自己感兴趣的领域，同时也容易被环境中的细节影响。这种组合意味着你拥有一个丰富而独特的内心世界。";
+            }
+            if (highDims.includes("社交焦虑") && highDims.includes("社交理解偏低")) {
+                return "你在社交中容易感到紧张，同时又觉得难以捕捉他人的社交信号，这可能会让你在人群中感到孤独。";
+            }
+            if (highDims.includes("情绪/创伤") && highDims.includes("边界敏感")) {
+                return "你对自己的情绪和空间都很敏感，过去的一些经历可能让你更加小心翼翼地保护自己。这种自我保护的意识值得尊重。";
+            }
+            if (highDims.includes("感官敏感") && highDims.includes("情绪/创伤")) {
+                return "你的内心像一台高度灵敏的接收器，既能捕捉到世界的细微美好，也容易受到负面情绪的影响。";
+            }
+            if (highDims.includes("刻板兴趣") && highDims.includes("社交理解偏低")) {
+                return "你沉浸在自我世界里时充满热情，但与人交往时可能感到隔阂。也许找到能与你分享兴趣的人，会让你感到更自在。";
+            }
+            return "你的特质组合比较平衡，适应力强，能在不同情境中灵活调整。";
+        }
+
+        function getPossibilities(avg) {
+            let list = [];
+            if (avg["感官敏感"] >= 3.8 && avg["刻板兴趣"] >= 3.8 && avg["社交理解"] <= 3.2) list.push("自闭谱系特质（如阿斯伯格）");
+            if (avg["社交焦虑"] >= 4.0) list.push("社交焦虑倾向");
+            if (avg["感官敏感"] >= 4.0 && avg["情绪/创伤"] >= 3.8) list.push("高敏感人格");
+            if (avg["情绪/创伤"] >= 4.0 && avg["边界敏感"] >= 4.0) list.push("回避型应对或创伤反应");
+            if (list.length === 0) list.push("没有特别明显的倾向，更多是你独特的个性");
+            return list.join("、");
+        }
+    </script>
+</body>
+</html>

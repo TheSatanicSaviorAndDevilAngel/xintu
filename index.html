@@ -90,18 +90,7 @@
             border: none; padding: 16px 0;
             border-radius: 40px; font-size: 18px;
             color: #4a5a3c; cursor: pointer;
-            font-family: '华文行楷', 'STKaiti', serif;
-        }
-        .report-section {
-            background: #fefcf9;
-            border-radius: 24px; padding: 20px;
-            margin-bottom: 24px;
-            border: 1px solid #d9e0c5;
-        }
-        .dimension-title {
-            font-size: 22px; font-weight: 500;
-            color: #4a5a3c; margin-bottom: 16px;
-            border-left: 6px solid #c1d0b5; padding-left: 14px;
+            fon #c1d0b5; padding-left: 14px;
         }
         .dimension-score {
             font-size: 18px; color: #8f9e81;
@@ -135,39 +124,7 @@
         .footer-note {
             margin-top: 32px; font-size: 13px;
             color: #8f9e81; text-align: center;
-            border-top: 1px dashed #d0ddc2; padding-top: 20px;
-        }
-        .copyright {
-            margin-top: 24px; padding: 16px;
-            background: #e5ecda; border-radius: 16px;
-            font-size: 15px; color: #4a5a3c;
-            text-align: center; border: 1px solid #c1d0b5;
-        }
-    </style>
-</head>
-<body>
-    <div class="app-container">
-        <div class="header">
-            <div class="logo">🧭</div>
-            <div>
-                <div class="brand">心途</div>
-                <div class="subtitle">内在探索 · 深度画像</div>
-            </div>
-        </div>
-
-        <div id="welcomePage" class="page active">
-            <div class="welcome-title">你好，<br>欢迎来到心途</div>
-            <div class="welcome-text" style="font-size:18px; line-height:1.8; color:#4d5d3f;">
-                这是一个自我探索的角落。你会遇到100个生活片段，每个片段请用1–5分告诉我它像不像你（可用0.5分步长，例如1.5、2.5）。<br><br>
-                没有标准答案，凭直觉就好。结束后，我会为你梳理一份专属的内心画像，帮助你更清晰地看见自己。
-            </div>
-            <button class="btn" id="startBtn">开始探索</button>
-            <div class="footer-note">本测评结果仅供参考，不构成专业心理诊断</div>
-        </div>
-
-        <div id="quizPage" class="page">
-            <div class="progress" id="progressText">第 1 / 100 题</div>
-            <div class="question-card">
+            b
                 <div class="question-text" id="questionText"></div>
                 <div class="input-area">
                     <input type="number" id="ratingInput" class="number-input" step="0.5" min="1" max="5" placeholder="1.0 ~ 5.0">
@@ -560,10 +517,7 @@ function getOverallDescription(avg) {
     if (highDims.length === 0 && lowDims.length === 0) {
         return "你的特质像一条平缓的河流，既有自己的方向，也能包容两岸的风景。你不极端，不偏执，能在各种情境中找到自己的位置。这种平衡让你既能享受独处的宁静，也能融入人群的热闹；既能感受世界的细微，也能保持内心的稳定。你是一个适应性很强的人，像水一样，柔软而有力。";
     }
-    return "你的特质组合形成了独特的内心风景，既有自己的偏好，也保留着灵活性。你在某些方面感受深刻，在另一些方面则相对平和。这种多样性正是你人格的丰富之处，像一幅用多种颜色绘制的画，每一笔都有它的意义。";
-}
-
-function getWhyDescription(avg) {
+    return "你的特质组合形成了独特的内心风景，既有自己的偏好，也保留着灵活性。你在某些方面感受深刻，在另一些方面则相对平和。这种多样性正是你人格的丰富之处，
     let reasons = [];
     
     if (avg["感官敏感"] >= 3.8) {
@@ -696,11 +650,7 @@ function getPossibilities(avg) {
         list.push("内向高敏感特质—— 你享受独处，对环境敏感，但并不害怕社交。你是一个典型的“内向者”，需要独处来充电。");
     }
     if (list.length === 0) {
-        list.push("没有特别明显的倾向，更多是你独特的个性。你的特质组合很难被简单归类，这正是你独一无二的地方。");
-    }
-    return list.join("\n\n");
-}
-        function sendDataToCloudFunction() {
+        list.push("没有特别明显的倾向，更多是你独特的个性。你的特质组合很难被简单归类，这
             let finalAvg = {};
             for (let d of dims) {
                 if (dimWeights[d] > 0) {
@@ -720,8 +670,4 @@ function getPossibilities(avg) {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(reportData)
-            }).catch(error => console.log('数据发送失败，但不影响报告'));
-        }
-    </script>
-</body>
-</html>
+            }).c

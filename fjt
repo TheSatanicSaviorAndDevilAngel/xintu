@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>隐盾·防监听安全工具箱 | 端到端加密演示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(145deg, #0a0f1e 0%, #0c1222 100%);
+            font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, 'Roboto', sans-serif;
+            color: #eef4ff;
+            padding: 2rem 1.5rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .security-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        .shield-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: rgba(16, 185, 129, 0.12);
+            backdrop-filter: blur(4px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 100px;
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            margin-bottom: 1.2rem;
+        }
+        .shield-badge span {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #a7f3d0;
+        }
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFFFFF 0%, #9bc5ff 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .sub {
+            color: #8e9bbe;
+            font-size: 1rem;
+            border-bottom: 1px dashed #2d3a5e;
+            display: inline-block;
+            padding-bottom: 0.3rem;
+        }
+
+        .grid-main {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .card {
+            background: rgba(18, 25, 45, 0.65);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            border: 1px solid rgba(72, 187, 255, 0.18);
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.4);
+            transition: all 0.2s ease;
+            padding: 1.5rem 1.8rem;
+        }
+        .card:hover {
+            border-color: rgba(72, 187, 255, 0.4);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.6rem;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            padding-bottom: 0.8rem;
+        }
+        .card-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        .input-group {
+            margin-bottom: 1.2rem;
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            color: #b9ceff;
+        }
+        textarea, input {
+            width: 100%;
+            background: #0f1425;
+            border: 1px solid #2a385c;
+            border-radius: 1rem;
+            padding: 0.9rem 1rem;
+            color: #f0f3fc;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+        textarea:focus, input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59,130,246,0.3);
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1.2rem 0 0.8rem;
+        }
+        button {
+            background: #1f2a46;
+            border: none;
+            padding: 0.65rem 1.4rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #e2edff;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        button.primary {
+            background: #2563eb;
+            box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+            color: white;
+        }
+        button.primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+        }
+        button.warning {
+            background: #9b2c2c30;
+            border: 1px solid #ef444480;
+            color: #ffc5c5;
+        }
+        .result-box {
+            background: #0b0f1c;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 4px solid #3b82f6;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 0.8rem;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        .copy-btn {
+            background: none;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.7rem;
+            border: 1px solid #3a4a6e;
+            margin-top: 0.5rem;
+        }
+        .tips-card {
+            background: linear-gradient(135deg, #0e1528, #0a0f1e);
+            border: 1px solid #2f416b;
+        }
+        .tip-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 1rem;
+            align-items: flex-start;
+        }
+        .tip-icon {
+            background: #1f3a5f;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .https-banner {
+            background: #1a2c3e;
+            border-radius: 1rem;
+            padding: 0.8rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .badge-secure {
+            background: #10b98130;
+            padding: 0.2rem 0.8rem;
+            border-radius: 40px;
+            color: #6ee7b7;
+        }
+        @media (max-width: 880px) {
+            .grid-main {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+        footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            color: #5f739b;
+            border-top: 1px solid #1e2a44;
+            padding-top: 1.5rem;
+        }
+        .inline-code {
+            background: #00000040;
+            padding: 0.1rem 0.3rem;
+            border-radius: 6px;
+            font-family: monospace;
+        }
+        hr {
+            border-color: #2c3a5a;
+            margin: 0.8rem 0;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="security-header">
+        <div class="shield-badge">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L3 7L12 12L21 7L12 2Z" stroke="#10B981" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="#10B98120"/>
+                <path d="M12 12V22M12 22L7 19.5M12 22L17 19.5" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M3 10.5L12 15L21 10.5" stroke="#10B981" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            <span>端到端加密 · 零知识架构</span>
+        </div>
+        <h1>🛡️ 隐盾 · 防监听工坊</h1>
+        <div class="sub">所有数据仅在您的设备上加密 — 网络无法窃听，服务器无从破解</div>
+    </div>
+
+    <div class="grid-main">
+        <div class="card">
+            <div class="card-header">
+                <div class="icon-accent">🔐</div>
+                <h2>量子抗性加密舱</h2>
+            </div>
+            <div class="input-group">
+                <label>📨 原始消息 / 明文</label>
+                <textarea id="plaintextInput" rows="3" placeholder="在此输入私密内容..."></textarea>
+            </div>
+            <div class="input-group">
+                <label>🔑 加密密钥 (强密码 / 口令)</label>
+                <input type="password" id="secretKey" placeholder="至少8位，建议大小写+数字+符号" autocomplete="off">
+                <div style="display: flex; justify-content: flex-end; margin-top: 6px;">
+                    <button id="genStrongPwd" style="padding: 0.3rem 0.9rem; font-size:0.7rem;">✨ 生成强密码</button>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button id="encryptBtn" class="primary">🔒 加密 & 生成密文</button>
+                <button id="decryptBtn">🔓 解密密文</button>
+                <button id="clearAllBtn" class="warning">🗑️ 清空所有</button>
+            </div>
+            <div class="input-group">
+                <label>📦 密文 (加密结果/待解密数据)</label>
+                <textarea id="ciphertextArea" rows="3" placeholder="加密后的安全封装包 (Base64格式)"></textarea>
+            </div>
+            <div class="result-box" id="resultMessage">
+                💡 操作结果将显示在这里
+            </div>
+            <button id="copyCipherBtn" class="copy-btn">📋 复制密文</button>
+        </div>
+
+        <div class="card tips-card">
+            <div class="card-header">
+                <div class="icon-accent">🛡️</div>
+                <h2>反监听·安全基线</h2>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🔒</div>
+                <div><strong>端到端加密核心</strong><br>采用 <span class="inline-code">AES-256-GCM</span> + <span class="inline-code">PBKDF2</span> 派生密钥。所有加解密均在本地浏览器完成。</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🌐</div>
+                <div><strong>传输防窃听</strong><br>请确保当前页面通过 <span style="color:#6ee7b7;">HTTPS</span> 访问，否则中间人可拦截数据。</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">🧠</div>
+                <div><strong>口令强度决定安全</strong><br>下方密码生成器可创建高熵密钥。切勿在未加密的信道分享密码。</div>
+            </div>
+            <div class="tip-item">
+                <div class="tip-icon">📡</div>
+                <div><strong>对抗流量分析</strong><br>建议配合VPN / Tor网络，避免元数据泄露。</div>
+            </div>
+            <hr>
+            <div id="httpsStatus" class="https-banner">
+                <span>🔍 连接安全检测中...</span>
+                <span class="badge-secure" id="httpsBadge">检查中</span>
+            </div>
+            <div style="margin-top: 0.8rem; font-size:0.8rem; background:#070b14; border-radius: 1rem; padding: 0.7rem;">
+                ⚡ 实操建议：将敏感文本先用本工具加密，仅通过安全信道传输密文。
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: space-between; margin-top: 0.5rem;">
+        <div style="background:#0f142580; border-radius: 1.2rem; padding: 0.8rem 1.2rem; font-size:0.8rem; flex:1;">
+            📌 <strong>工作原理</strong>：每次加密生成随机盐(16字节)和随机向量IV(12字节)，通过PBKDF2迭代10万次派生出AES-256密钥，采用GCM模式。
+        </div>
+        <div style="background:#0f142580; border-radius: 1.2rem; padding: 0.8rem 1.2rem; font-size:0.8rem; flex:1;">
+            🧪 <strong>测试功能</strong>：点击“填充示例”可体验加密解密闭环；生成强密码后再加密，尝试修改任意字符解密会失败。
+        </div>
+    </div>
+    <div style="display: flex; gap: 1rem; margin-top: 1rem; flex-wrap: wrap;">
+        <button id="exampleFillBtn" style="background:#1f3c5e;">📋 填充示例 (明文→加密演示)</button>
+        <button id="testDecodeExample" style="background:#1f3c5e;">🧪 还原示例密文</button>
+    </div>
+    <footer>
+        ⚠️ 本工具为加密技术演示，无法防御物理入侵或已被植入的恶意软件。保持设备洁净 + 强密码习惯 = 最佳防监听策略。
+    </footer>
+</div>
+
+<script>
+    (function() {
+        const plainInput = document.getElementById('plaintextInput');
+        const passwordInput = document.getElementById('secretKey');
+        const ciphertextArea = document.getElementById('ciphertextArea');
+        const resultDiv = document.getElementById('resultMessage');
+        const encryptBtn = document.getElementById('encryptBtn');
+        const decryptBtn = document.getElementById('decryptBtn');
+        const clearBtn = document.getElementById('clearAllBtn');
+        const genPwdBtn = document.getElementById('genStrongPwd');
+        const copyCipher = document.getElementById('copyCipherBtn');
+        const exampleFill = document.getElementById('exampleFillBtn');
+        const testDecodeExample = document.getElementById('testDecodeExample');
+
+        function showResult(msg, isError = false) {
+            resultDiv.innerHTML = msg;
+            resultDiv.style.borderLeftColor = isError ? '#ef4444' : '#3b82f6';
+            if (isError) resultDiv.style.background = '#1f121a30';
+            else resultDiv.style.background = '#0b0f1c';
+        }
+
+        async function getRandomBytes(length) {
+            const buf = new Uint8Array(length);
+            crypto.getRandomValues(buf);
+            return buf;
+        }
+
+        async function deriveKey(password, salt, iterations = 100000) {
+            const encoder = new TextEncoder();
+            const keyMaterial = await crypto.subtle.importKey(
+                'raw',
+                encoder.encode(password),
+                { name: 'PBKDF2' },
+                false,
+                ['deriveKey']
+            );
+            return await crypto.subtle.deriveKey(
+                {
+                    name: 'PBKDF2',
+                    salt: salt,
+                    iterations: iterations,
+                    hash: 'SHA-256'
+                },
+                keyMaterial,
+                { name: 'AES-GCM', length: 256 },
+                false,
+                ['encrypt', 'decrypt']
+            );
+        }
+
+        async function encryptMessage(plainText, password) {
+            if (!plainText || plainText.trim() === '') throw new Error('请输入要加密的明文消息');
+            if (!password || password.length === 0) throw new Error('请设置加密密钥（密码）不能为空');
+            const salt = await getRandomBytes(16);
+            const iv = await getRandomBytes(12);
+            const aesKey = await deriveKey(password, salt, 100000);
+            const encoder = new TextEncoder();
+            const encodedData = encoder.encode(plainText);
+            const encrypted = await crypto.subtle.encrypt(
+                { name: 'AES-GCM', iv: iv, tagLength: 128 },
+                aesKey,
+                encodedData
+            );
+            const ciphertextArray = new Uint8Array(encrypted);
+            const packageObj = {
+                s: Array.from(salt),
+                i: Array.from(iv),
+                c: Array.from(ciphertextArray)
+            };
+            const jsonStr = JSON.stringify(packageObj);
+            const base64Cipher = btoa(String.fromCharCode(...new TextEncoder().encode(jsonStr)));
+            return base64Cipher;
+        }
+
+        async function decryptMessage(base64Cipher, password) {
+            if (!base64Cipher || base64Cipher.trim() === '') throw new Error('密文为空');
+            if (!password || password.length === 0) throw new Error('请输入解密密钥');
+            let decodedJson;
+            try {
+                const binaryStr = atob(base64Cipher);
+                const uint8Array = new Uint8Array(binaryStr.length);
+                for (let i = 0; i < binaryStr.length; i++) uint8Array[i] = binaryStr.charCodeAt(i);
+                const jsonStr = new TextDecoder().decode(uint8Array);
+                const obj = JSON.parse(jsonStr);
+                if (!obj.s || !obj.i || !obj.c) throw new Error('密文结构损坏');
+                const salt = new Uint8Array(obj.s);
+                const iv = new Uint8Array(obj.i);
+                const ciphertextWithTag = new Uint8Array(obj.c);
+                const aesKey = await deriveKey(password, salt, 100000);
+                const decrypted = await crypto.subtle.decrypt(
+                    { name: 'AES-GCM', iv: iv, tagLength: 128 },
+                    aesKey,
+                    ciphertextWithTag
+                );
+                const decoder = new TextDecoder();
+                return decoder.decode(decrypted);
+            } catch (e) {
+                throw new Error('解密失败: 密码错误或密文已损坏');
+            }
+        }
+
+        async function handleEncrypt() {
+            const plain = plainInput.value;
+            const pwd = passwordInput.value;
+            try {
+                showResult('⏳ 正在加密...', false);
+                const cipher = await encryptMessage(plain, pwd);
+                ciphertextArea.value = cipher;
+                showResult('✅ 加密成功！密文已生成。', false);
+            } catch (err) {
+                showResult(`❌ 加密失败: ${err.message}`, true);
+            }
+        }
+
+        async function handleDecrypt() {
+            const cipher = ciphertextArea.value;
+            const pwd = passwordInput.value;
+            if (!cipher) { showResult('⚠️ 无密文可解密', true); return; }
+            try {
+                showResult('🔓 正在解密...', false);
+                const plain = await decryptMessage(cipher, pwd);
+                plainInput.value = plain;
+                showResult(`✅ 解密成功！明文已恢复。`, false);
+            } catch (err) {
+                showResult(`⛔ 解密失败: ${err.message}`, true);
+            }
+        }
+
+        function clearAll() {
+            plainInput.value = '';
+            passwordInput.value = '';
+            ciphertextArea.value = '';
+            showResult('🧹 已清空所有输入输出', false);
+        }
+
+        function generateStrongPassword(length = 20) {
+            const charset = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*?";
+            let pwd = '';
+            const array = new Uint8Array(length);
+            crypto.getRandomValues(array);
+            for (let i = 0; i < length; i++) {
+                pwd += charset[array[i] % charset.length];
+            }
+            return pwd;
+        }
+
+        function setStrongPassword() {
+            const strong = generateStrongPassword(20);
+            passwordInput.value = strong;
+            showResult('🔐 已填充超强随机密码', false);
+        }
+
+        function copyCipherText() {
+            const cipher = ciphertextArea.value;
+            if (!cipher) { showResult('⚠️ 没有密文可复制', true); return; }
+            navigator.clipboard.writeText(cipher).then(() => {
+                showResult('📋 密文已复制到剪贴板', false);
+            }).catch(() => showResult('❌ 复制失败', true));
+        }
+
+        async function runExample() {
+            const demoPlain = "【绝密】项目发布会定于2026年5月20日，地点：线上加密会议室。访问代码: X9K$#mP2";
+            const demoPassword = generateStrongPassword(18);
+            plainInput.value = demoPlain;
+            passwordInput.value = demoPassword;
+            try {
+                const demoCipher = await encryptMessage(demoPlain, demoPassword);
+                ciphertextArea.value = demoCipher;
+                showResult(`✨ 示例已加载！<br>🔑 当前密码: <strong>${demoPassword}</strong><br>密文已生成，可尝试解密。`, false);
+            } catch(e) {
+                showResult(`示例生成失败: ${e.message}`, true);
+            }
+        }
+
+        async function testDecodeFlow() {
+            if (!ciphertextArea.value || !passwordInput.value) {
+                showResult('请先通过“填充示例”或手动加密产生密文和密码', true);
+                return;
+            }
+            try {
+                const decrypted = await decryptMessage(ciphertextArea.value, passwordInput.value);
+                plainInput.value = decrypted;
+                showResult('✅ 自动验证通过！解密结果符合预期。', false);
+            } catch(err) {
+                showResult(`❌ 验证失败: ${err.message}`, true);
+            }
+        }
+
+        function checkHttpsStatus() {
+            const httpsBadge = document.getElementById('httpsBadge');
+            const isSecure = window.location.protocol === 'https:';
+            if (isSecure) {
+                httpsBadge.innerHTML = '🔒 安全连接 (HTTPS)';
+                httpsBadge.style.background = '#10b98130';
+            } else {
+                httpsBadge.innerHTML = '⚠️ 未使用HTTPS · 存在监听风险';
+                httpsBadge.style.background = '#9b2c2c60';
+                const bannerDiv = document.getElementById('httpsStatus');
+                if (!document.querySelector('#extraHttpsWarn')) {
+                    const warnDiv = document.createElement('div');
+                    warnDiv.id = 'extraHttpsWarn';
+                    warnDiv.style.marginTop = '8px';
+                    warnDiv.style.fontSize = '0.75rem';
+                    warnDiv.style.color = '#ffae70';
+                    warnDiv.innerHTML = '⚠️ 当前页面未通过HTTPS传输，请部署到HTTPS环境。';
+                    bannerDiv.appendChild(warnDiv);
+                }
+            }
+        }
+
+        encryptBtn.addEventListener('click', handleEncrypt);
+        decryptBtn.addEventListener('click', handleDecrypt);
+        clearBtn.addEventListener('click', clearAll);
+        genPwdBtn.addEventListener('click', setStrongPassword);
+        copyCipher.addEventListener('click', copyCipherText);
+        exampleFill.addEventListener('click', runExample);
+        testDecodeExample.addEventListener('click', testDecodeFlow);
+        checkHttpsStatus();
+        showResult('✅ 安全就绪 | 所有加密均在本地执行。', false);
+    })();
+</script>
+</body>
+</html>
